@@ -10,7 +10,9 @@ from decimal import Decimal
 
 
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html",{
+        "Listings":Listing.objects.all()
+    })
 
 
 def login_view(request):

@@ -3,5 +3,30 @@
 {% block body %}
     <h2>Active Listings</h2>
 
-    TODO
+    {% if Listings %}
+
+        {% for Listing in Listings %}
+            {% if Listing.status == "active" %}
+            <div class="card" style="display: grid; grid-template-columns: 250px auto ;margin:10px" >
+                <img src="{% if Listing.url %}{{Listing.url}}{% else %}/static/placeholder.png{% endif %}" alt="{{Listing.title}}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" >
+                <div style="margin: 10px;">
+                    <h4>
+                        {{Listing.title}}
+                    </h4>
+                    <div style="margin-bottom: 5px;">
+                        <strong>Price:</strong> {{Listing.current_price}}$
+                    </div>
+                    <div style="margin-bottom: 40px;">
+                        {{Listing.description}}
+                    </div>
+                    <div style="font-size: 14px; color: rgb(162, 160, 160)">
+                        Created {{Listing.created_time}}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+
+    {% endif %}
+
 {% endblock %}

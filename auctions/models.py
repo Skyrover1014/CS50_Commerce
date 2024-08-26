@@ -12,7 +12,7 @@ class Listing(models.Model):
     description = models.TextField(max_length=2048)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     current_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    url = models.URLField(blank=True, null=True, max_length=200)
+    url = models.URLField(blank=True, null=True, max_length=500)
     STATUS_CHOICES = [
         ('active', 'Active'),
         ('ended','Ended')

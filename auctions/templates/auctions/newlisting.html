@@ -2,5 +2,32 @@
 
 {% block body %}
     <h2>Create Listings</h2>
-    
+
+    {% if message %}
+    <div>{{ message }}</div>
+    {% endif %}
+
+    <div class="pageContent" style="display: flex; justify-content: center; margin: 10px;">
+        <form action="{%url 'newListing' %}" method="post" class="form">
+            {% csrf_token %}
+            <div>
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" placeholder="title" required>
+            </div>
+            <div>
+                <label for="description">Description:</label>
+                <textarea type="text" id="description" name="description" placeholder="description" required></textarea>
+            </div>
+            <div>
+                <label for="starting_price">Starting price:</label>
+            <input type="number" id="starting_price" name="starting_price" placeholder="starting price" required>
+            </div>
+            <div>
+                <label for="image_url">Image url:</label>
+                <input type="url" id="image_url" name="image_url" placeholder="url">
+            </div>
+            <div>
+                <button type="submit">New Listing</button>
+            </div>
+    </div>
 {% endblock %}

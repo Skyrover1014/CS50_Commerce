@@ -6,7 +6,7 @@ from simple_history.admin import SimpleHistoryAdmin
 from .models import User, Listing, Bid, Comment
 
 class ListingAdmin(SimpleHistoryAdmin):
-    list_display = ('title', 'description', 'starting_price', 'current_price', 'status', 'created_time', 'updated_time', 'get_bid_count')
+    list_display = ('user','title', 'description', 'starting_price', 'current_price', 'status', 'created_time', 'updated_time', 'get_bid_count')
 
 class BidAdmin(SimpleHistoryAdmin):
     list_display = ('object', 'user', 'amount', 'bid_time')

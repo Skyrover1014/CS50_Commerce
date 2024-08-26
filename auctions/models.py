@@ -7,6 +7,7 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=64)
     description = models.TextField(max_length=2048)
     starting_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)

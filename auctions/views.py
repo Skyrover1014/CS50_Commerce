@@ -4,7 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Listing, Bid
+from decimal import Decimal
+
 
 
 def index(request):
@@ -61,3 +63,36 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+
+
+
+def new_listing(request):
+    if request.method == "POST":
+        user=request.user
+        title=request.POST["title"]
+        description=request.POST["description"]
+        starting_price=request.POST["starting_price"]
+        url=request.POST["image_url"]
+        status="active"
+
+
+        starting_price = Decimal(starting_price)
+
+        if starting_price <= 0:
+            return render(request,"auctions/newListing.html",{
+                "message": "the starting_price must be greater than 0 dollars! "
+            })
+        else:
+            listing = Listing.objects.create(
+                user=user,
+                title=title,
+                description=description,
+                starting_price=starting_price,
+                current_price=starting_price,
+                url=url,
+                status=status)
+            listing.save()
+            return HttpResponseRedirect(reverse("index"))
+
+    return render(request, "auctions/newListing.html")

@@ -1,18 +1,19 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
 <div class="card" style="display: block; padding: 10px;">
     <h2>Listing:{{listing.item}} Listing ID:{{listing.id}}</h2>
 
-    <form action="{% url 'auctions:toggleWatch' listing.id %}" method="POST">
-        {% csrf_token %}
-        {% if track_status == False %}
-            <button type="submit" style="margin: 10px;">Watch</button>
-        {% else %}
-            <button type="submit" style="margin: 10px;">Unwatch</button>
-        {% endif %}
-    </form>
+    {% if user.is_authenticated %}
+        <form action="{% url 'auctions:toggleWatch' listing.id %}" method="POST">
+            {% csrf_token %}
+            {% if track_status == False %}
+                <button type="submit" style="margin: 10px;">Watch</button>
+            {% else %}
+                <button type="submit" style="margin: 10px;">Unwatch</button>
+            {% endif %}
+        </form>
+    {% endif %}
 
     {% if message %}
         <div style=" color: red; font-size: 20px;">{{ message }}</div>
@@ -34,30 +35,31 @@
         {{bid_times}} 
     </div>
 
-
-    {% if listing.status == 'active'%}
-        {% if is_owner %}
-            <form action="{% url 'auctions:endBid' listing.id %}" method="post">
-                {% csrf_token %}
-                <div> You are the owner!</div>
-                <button type="submit" style="margin: 10px;"> Close the Bid</button>
-            </form>
-            {% else %}
-                <form action="{% url 'auctions:placeBid' listing.id %}" method="post">
+    {% if user.is_authenticated %}
+        {% if listing.status == 'active'%}
+            {% if is_owner %}
+                <form action="{% url 'auctions:endBid' listing.id %}" method="post">
                     {% csrf_token %}
-                    <div style="width: 98%; margin-left: 10px; margin-top: 3px;">
-                        {{bidForm.amount}}
-                    </div>
-                    <button type="submit" style="margin: 10px;"> Place Bid </button>
+                    <div> You are the owner!</div>
+                    <button type="submit" style="margin: 10px;"> Close the Bid</button>
                 </form>
-        {% endif %}
-        {% else %}
-            <h2 style=" color: red;">Action ended </h2>
-            {% if is_winner %}
-                <div>You Won!!</div>
                 {% else %}
-                    Winner is {{listing.winner.username}}
-            {% endif%}
+                    <form action="{% url 'auctions:placeBid' listing.id %}" method="post">
+                        {% csrf_token %}
+                        <div style="width: 98%; margin-left: 10px; margin-top: 3px;">
+                            {{bidForm.amount}}
+                        </div>
+                        <button type="submit" style="margin: 10px;"> Place Bid </button>
+                    </form>
+            {% endif %}
+            {% else %}
+                <h2 style=" color: red;">Action ended </h2>
+                {% if is_winner %}
+                    <div>You Won!!</div>
+                    {% else %}
+                        Winner is {{listing.winner.username}}
+                {% endif%}
+        {% endif %}
     {% endif %}
 </div>
 

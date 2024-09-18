@@ -200,16 +200,28 @@ def show_all_comments_view(request):
 
 def entry_bid(request, listing_id):   
     listing, context = get_listing_context(listing_id)
-    context.update({
-        **edit_comment_view(request),
-        **show_all_comments_view(request),
-        **track_status_button(listing, request.user),
-        **comment_list(listing),
-        'message':request.GET.get('message',None),
-        'is_owner':request.user == listing.owner,
-        'is_winner':request.user == listing.winner,
-        'bidForm':BidForm()
-    })
+
+    if request.user.is_authenticated:
+        context.update({
+            **edit_comment_view(request),
+            **show_all_comments_view(request),
+            **track_status_button(listing, request.user),
+            **comment_list(listing),
+            'message':request.GET.get('message',None),
+            'is_owner':request.user == listing.owner,
+            'is_winner':request.user == listing.winner,
+            'bidForm':BidForm()
+        })
+    else: 
+        context.update({
+            **show_all_comments_view(request),
+            **comment_list(listing),
+            'commentForm':None,
+            'bidForm':None,
+            'is_owner': False,
+            'is_winner':False,
+            'message':request.GET.get('message',None),
+        })
     print(context)
     return render(request, "auctions/bidPage.html",context)
 

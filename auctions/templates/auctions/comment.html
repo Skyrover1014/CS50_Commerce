@@ -1,11 +1,13 @@
 <div id="comments-section" class="comments-section">
-   
-    {% if not edit_comment_id %}
-        <form action="{% url 'auctions:comment' listing.id %}#comments-section" method="post">
-            {% csrf_token %}
-            <div>{{commentForm.content}}</div>
-            <button type="submit" style="margin:10px"> Comment </button>
-        </form>
+    
+    {% if user.is_authenticated %}
+        {% if not edit_comment_id %}
+            <form action="{% url 'auctions:comment' listing.id %}#comments-section" method="post">
+                {% csrf_token %}
+                <div>{{commentForm.content}}</div>
+                <button type="submit" style="margin:10px"> Comment </button>
+            </form>
+        {% endif %}
     {% endif %}
 
     <div>

@@ -1,0 +1,31 @@
+{% if Listings %}
+        {% for Listing in Listings %}
+            {% if Listing.status == "active" %}
+            <a href="{% url 'auctions:entryBid' Listing.id %}" class="card_link">
+                <div class="card" >
+                    <img src="{% if Listing.url %}{{Listing.url}}{% else %}/static/placeholder.png{% endif %}" alt="{{Listing.title}}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" >
+                    <div style="margin: 10px;">
+                        <h4>
+                            {{Listing.item}}
+                        </h4>
+                        <div style="margin-bottom: 5px;">
+                            <strong>Category:</strong> {{Listing.category.name}}
+                        </div> 
+                        <div style="margin-bottom: 5px;">
+                            <strong>Price:</strong> {{Listing.current_price}}$
+                        </div>
+                        <div style="margin-bottom: 40px;">
+                            {{Listing.description}}
+                        </div>
+                        <div style="margin-bottom: 5px;">
+                            <strong>Seller:</strong> {{Listing.owner}}
+                        </div> 
+                        <div style="font-size: 14px; color: rgb(162, 160, 160)">
+                            Created {{Listing.created_time}}
+                        </div>
+                    </div>
+                </div>
+             </a>
+            {% endif %}
+        {% endfor %}
+    {% endif %}

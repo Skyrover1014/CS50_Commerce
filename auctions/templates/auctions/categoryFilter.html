@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Category: {{Category}}</h2>
+    {% if Category %}
+        {% if Listings %}
+            {% include 'auctions/listings.html' %}
+        {% else %}
+            <h3>There is not active listing in this Category </h3>
+        {% endif %}
+    {% endif %}
+{% endblock %}

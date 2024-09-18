@@ -1,0 +1,74 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<div class="card" style="display: block; padding: 10px;">
+    <h2>Listing:{{listing.item}} Listing ID:{{listing.id}}</h2>
+
+    <form action="{% url 'auctions:toggleWatch' listing.id %}" method="POST">
+        {% csrf_token %}
+        {% if track_status == False %}
+            <button type="submit" style="margin: 10px;">Watch</button>
+        {% else %}
+            <button type="submit" style="margin: 10px;">Unwatch</button>
+        {% endif %}
+    </form>
+
+    {% if message %}
+        <div style=" color: red; font-size: 20px;">{{ message }}</div>
+    {% endif %} 
+    
+    <div>
+       <img src="{% if listing.url %}{{listing.url}}{% else %}/static/placeholder.png{% endif %}" alt="{{listing.item}}" style="display: block; margin: 0 auto;">
+    </div>
+    
+    <div style="font-size: 16px; margin: 10px;">
+        {{listing.description}}
+    </div>
+    
+    <h3 style="margin: 10px;">
+        Current price : ${{listing.current_price}}
+    </h3>
+    
+    <div style="font-size: 12px; margin-left: 10px;">
+        {{bid_times}} 
+    </div>
+
+
+    {% if listing.status == 'active'%}
+        {% if is_owner %}
+            <form action="{% url 'auctions:endBid' listing.id %}" method="post">
+                {% csrf_token %}
+                <div> You are the owner!</div>
+                <button type="submit" style="margin: 10px;"> Close the Bid</button>
+            </form>
+            {% else %}
+                <form action="{% url 'auctions:placeBid' listing.id %}" method="post">
+                    {% csrf_token %}
+                    <div style="width: 98%; margin-left: 10px; margin-top: 3px;">
+                        {{bidForm.amount}}
+                    </div>
+                    <button type="submit" style="margin: 10px;"> Place Bid </button>
+                </form>
+        {% endif %}
+        {% else %}
+            <h2 style=" color: red;">Action ended </h2>
+            {% if is_winner %}
+                <div>You Won!!</div>
+                {% else %}
+                    Winner is {{listing.winner.username}}
+            {% endif%}
+    {% endif %}
+</div>
+
+<div class="card" style="display: block; padding: 10px;">
+    <h4>Category: {{listing.category.name }}</h4>
+    <div>{{listing.category.description }} </div>
+</div>
+
+<div class="card" style="display: block; padding: 10px;">
+    <h4>Comment</h4>
+    {% include 'auctions/comment.html' %}
+</div>
+
+{% endblock %}

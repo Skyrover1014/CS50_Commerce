@@ -1,0 +1,12 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Category</h2>
+   {% for Category in Categories %}
+    <a href="{% url 'auctions:categoryFilter' Category.name %}" class="card_link">
+        <div class="card" style="margin: 10px; padding: 10px;">
+            <h5>{{Category.name}}</h5>
+    </div>
+    </a>
+    {% endfor %}
+{% endblock %}

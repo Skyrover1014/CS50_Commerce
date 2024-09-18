@@ -1,0 +1,47 @@
+<div id="comments-section" class="comments-section">
+   
+    {% if not edit_comment_id %}
+        <form action="{% url 'auctions:comment' listing.id %}#comments-section" method="post">
+            {% csrf_token %}
+            <div>{{commentForm.content}}</div>
+            <button type="submit" style="margin:10px"> Comment </button>
+        </form>
+    {% endif %}
+
+    <div>
+        {% if Comments|length > 3 %}
+            <form action="{% url 'auctions:entryBid' listing.id %}#comments-section" method="GET">
+                <input type="hidden" name="show_comments" value='{% if show_all_comments %}hidden{% else %}all{% endif %}'>
+                <button type="submit" style="margin:10px;">
+                    {% if show_all_comments %}Hide Comments{% else %}Show all Comments{% endif %} 
+                </button>
+            </form> 
+        {% endif %}
+    </div>
+
+    {% if Comments %}
+        {% for Comment in Comments %}
+            {% if Comment.user == user and Comment.id == edit_comment_id %}
+                <form action="{% url 'auctions:editComment' listing.id Comment.id %}#comments-section" method="post">
+                    {% csrf_token %}
+                    <label for="editContent"> Edit your comment  </label>
+                    <div>{{commentForm.content}}</div>
+                    <button type="submit" style="margin:10px;"> Save the Edit </button>
+                    <a href="{% url 'auctions:entryBid' listing.id %}">Cancel</a>
+                </form>
+            {% elif show_all_comments == True or forloop.counter <= 3 %}
+                <div> {{Comment.id}} {{Comment.user}} at {{Comment.comment_time}}: {{Comment.content}} </div>
+                {% if Comment.user == user %}
+                <form action="{% url 'auctions:entryBid' listing.id %}#comments-section" method="GET">
+                    <input type="hidden" name="edit" value="{{Comment.id}}">
+                    <button type="submit" style="margin:10px;"> Edit Comment </button>
+                </form> 
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <div>No comments yet.</div>
+    {% endif %}
+
+</div>
+

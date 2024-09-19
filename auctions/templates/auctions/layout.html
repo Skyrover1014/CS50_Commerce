@@ -1,4 +1,5 @@
 {% load static %}
+{% load static tailwind_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,46 +7,61 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale =1">
         <title>{% block title %}Auctions{% endblock %}</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        {% tailwind_css %}
+        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
-    <body>
-        <h1>Auctions</h1>
-        <div>
-            {% if user.is_authenticated %}
-                Signed in as <strong>{{ user.username }}</strong>.
-            {% else %}
-                Not signed in.
-            {% endif %}
-        </div>
-        <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'auctions:index' %}">Active Listings</a>
-            </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:logout' %}">Log Out</a>
+    <body class="bg-gray-100 text-gray-900">        
+        <header class="bg-white shadow">
+            <div class="container mx-auto py-4">
+                <h1 class="text-3xl font-bold text-center">Auctions</h1>
+                <div class="text-center mt-2">
+                    {% if user.is_authenticated %}
+                        <p>Signed in as <strong>{{ user.username }}</strong>.</p>
+                    {% else %}
+                        <p>Not signed in.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <nav class="bg-blue-500 text-white py-2">
+            <ul class="container mx-auto flex justify-center space-x-4">
+                <li>
+                    <a class="hover:underline" href="{% url 'auctions:index' %}">Active Listings</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:newListing' %}">Create Listings</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:watchList' %}">Watchlist</a>
-                </li> 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:categoryView' %}">Category</a>
-                </li>   
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auctions:register' %}">Register</a>
-                </li>
-            {% endif %}
-        </ul>
-        <hr>
-        {% block body %}
-        {% endblock %}
+                {% if user.is_authenticated %}
+                    <li>
+                        <a class="hover:underline" href="{% url 'auctions:logout' %}">Log Out</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="{% url 'auctions:newListing' %}">Create Listings</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="{% url 'auctions:watchList' %}">Watchlist</a>
+                    </li> 
+                    <li>
+                        <a class="hover:underline" href="{% url 'auctions:categoryView' %}">Category</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a class="hover:underline" href="{% url 'auctions:login' %}">Log In</a>
+                    </li>
+                    <li>
+                        <a class="hover:underline" href="{% url 'auctions:register' %}">Register</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+       
+        <main class="container mx-auto mt-6">
+            <hr class="border-gray-300 my-4">
+            {% block body %}
+            {% endblock %}
+        </main>
+
+        <footer class="bg-white text-center py-4 mt-8">
+            <p>&copy; 2024 Auctions. All rights reserved.</p>
+        </footer>
     </body>
 </html>

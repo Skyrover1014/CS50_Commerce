@@ -8,7 +8,7 @@
         <form action="{% url 'auctions:toggleWatch' listing.id %}" method="POST">
             {% csrf_token %}
             {% if track_status == False %}
-                <button type="submit" style="margin: 10px;">Watch</button>
+                <button class="btn" type="submit">Watch</button>
             {% else %}
                 <button type="submit" style="margin: 10px;">Unwatch</button>
             {% endif %}

@@ -1,76 +1,113 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="card" style="display: block; padding: 10px;">
-    <h2>Listing:{{listing.item}} Listing ID:{{listing.id}}</h2>
+<div id="bid_card" class="card lg:card-side m-5 p-5 relative bg-base-100 shadow-xl ">
+    <figure class="rounded-3xl w-full h-full lg:h-full m-0 mb-3 lg:mx-4 lg:my-0 lg:w-1/2 ">
+        <img class="w-full lg:h-full object-cover rounded-3xl"
+        src="{% if listing.url %}{{listing.url}}{% else %}/static/placeholder.png{% endif %}" alt="{{listing.item}}">
+    </figure>
 
-    {% if user.is_authenticated %}
-        <form action="{% url 'auctions:toggleWatch' listing.id %}" method="POST">
-            {% csrf_token %}
-            {% if track_status == False %}
-                <button class="btn" type="submit">Watch</button>
-            {% else %}
-                <button type="submit" style="margin: 10px;">Unwatch</button>
-            {% endif %}
-        </form>
-    {% endif %}
-
-    {% if message %}
-        <div style=" color: red; font-size: 20px;">{{ message }}</div>
-    {% endif %} 
-    
-    <div>
-       <img src="{% if listing.url %}{{listing.url}}{% else %}/static/placeholder.png{% endif %}" alt="{{listing.item}}" style="display: block; margin: 0 auto;">
-    </div>
-    
-    <div style="font-size: 16px; margin: 10px;">
-        {{listing.description}}
-    </div>
-    
-    <h3 style="margin: 10px;">
-        Current price : ${{listing.current_price}}
-    </h3>
-    
-    <div style="font-size: 12px; margin-left: 10px;">
-        {{bid_times}} 
-    </div>
-
-    {% if user.is_authenticated %}
-        {% if listing.status == 'active'%}
-            {% if is_owner %}
-                <form action="{% url 'auctions:endBid' listing.id %}" method="post">
-                    {% csrf_token %}
-                    <div> You are the owner!</div>
-                    <button type="submit" style="margin: 10px;"> Close the Bid</button>
-                </form>
-                {% else %}
-                    <form action="{% url 'auctions:placeBid' listing.id %}" method="post">
+    <div class="card-body p-0 lg:w-1/2">
+        <div id="navbar" class="navbar sticky top-0 z-20 flex flex-col rounded-xl p-0 mx-0 shadow-lg bg-base-200">
+            <div class="flex justify-center w-full">
+                <div class="flex w-1/2 text-nowrap">
+                    <div class="m-4 tooltip tooltip-right z-20" data-tip="{{listing.category.description}}">
+                        <h4 class="badge p-4 badge-outline cursor-pointer font-bold ">{{listing.category.name }}</h4>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end md:pr-3 space-x-2 w-1/2">
+                    <img class="w-8" src="/static/bidding.png" alt="Bid"/>
+                    <div class="text-nowrap font-bold">{{bid_times}}</div>
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'auctions:toggleWatch' listing.id %}#bid_card" method="POST">
                         {% csrf_token %}
-                        <div style="width: 98%; margin-left: 10px; margin-top: 3px;">
-                            {{bidForm.amount}}
-                        </div>
-                        <button type="submit" style="margin: 10px;"> Place Bid </button>
+                        {% if track_status == False %}
+                            <button class="btn shadow-none" type="submit" title="Watch">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                            </svg>
+                            </button>
+                        {% else %}
+                            <button class="btn shadow-none" type="submit" title="Unwatch">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                            </svg>
+                            </button>
+                        {% endif %}
                     </form>
-            {% endif %}
-            {% else %}
-                <h2 style=" color: red;">Action ended </h2>
-                {% if is_winner %}
-                    <div>You Won!!</div>
+                    {% endif %}
+                </div>
+            </div>
+            {% if message %}
+            <div class="flex justify-center w-full h-auto m-0 p-2 text-base-200 bg-success bg-opacity-70 rounded-lg ">
+                <div>{{ message }}</div>
+            </div>
+            {% endif %} 
+        </div>
+
+        <div class="flex-grow overflow-y-scroll h-[calc(100vh-80px)] pb-16" name="card-content">
+            <h2 class="flex text-justify text-neutral text-3xl font-bold m-3">{{listing.item}}</h2>
+            <div class="flex text-justify text-neutral m-3">{{listing.description}}</div>   
+            <div class="w-full m-0 mt-5 stats stats-vertical lg:stats-horizontal overflow-x-hidden lg:overflow-x-hidden shadow-lg bg-success bg-opacity-5">
+                <div class="stat text-neutral m-1 box-border">
+                    <div class="stat-title">Current price</div>
+                    <div class="stat-value text-[25px] text-success">$ {{listing.current_price}}</div>
+                    <div class="stat-desc">Updated: {{listing.updated_time}}</div>
+                </div>
+                {% if user.is_authenticated %}
+                <div class="stat text-neutral m-1 box-border">
+                    {% if listing.status == 'active' %}
+                        {% if is_owner %}
+                        <form action="{% url 'auctions:endBid' listing.id %}#bid_card" method="post">
+                            {% csrf_token %}
+                            <div class="stat-title md:text-center text-success font-bold"> You are the owner!</div>
+                            <div class="stat-actions flex justify-center">
+                                <button class="btn btn-success text-white" type="submit"> Close the Bid</button>
+                            </div>
+                        </form>
+                        {% else %}
+                        <form action="{% url 'auctions:placeBid' listing.id %}#bid_card" method="post">
+                            {% csrf_token %}
+                            <div class="stat-title md:text-center text-success font-bold text-[20px]">Place the bid</div>
+                            <input type="text" name="amount" 
+                            class="input input-bordered w-full placeholder-success font-bold my-4" 
+                            placeholder="Bid" 
+                            value="{{ bidForm.amount.value|default:''}}" required
+                            autofocus
+                            />
+                        </form>
+                        {% endif %}  
                     {% else %}
-                        Winner is {{listing.winner.username}}
-                {% endif%}
+                    <h2 class="stat-title">Bid ended </h2>
+                        {% if is_winner %}
+                            <div class="stat-value font-bold text-info">You Won!!</div>
+                        {% else %}
+                            <div class="stat-value font-bold text-info text-[30px]">Winner is {{listing.winner.username}}</div>
+                        {% endif%}
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>  
+            {% if user.is_authenticated %} 
+            <div class="card flex justify-center m-3" name="card-comments">
+                {% include 'auctions/comment.html' %}
+            </div>   
+            {% endif %}
+        </div>
+        {% if user.is_authenticated %}
+        <div class="sticky bottom-0 z-10 flex justify-center">
+            {% if not edit_comment_id %}
+                <form class="navbar" action="{% url 'auctions:comment' listing.id %}#bid_card" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="content" 
+                    class="input input-bordered w-full font-bold rounded-2xl "
+                    placeholder="Leave your comment here"
+                    value="{{ commentForm.content.value|default:''}}" required/>
+                </form>
+            {% endif %}
+        </div>
         {% endif %}
-    {% endif %}
+    </div>
 </div>
-
-<div class="card" style="display: block; padding: 10px;">
-    <h4>Category: {{listing.category.name }}</h4>
-    <div>{{listing.category.description }} </div>
-</div>
-
-<div class="card" style="display: block; padding: 10px;">
-    <h4>Comment</h4>
-    {% include 'auctions/comment.html' %}
-</div>
-
 {% endblock %}

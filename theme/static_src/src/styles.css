@@ -1,3 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.nav_item {
+    @apply px-3 py-2 rounded-full transition text-base whitespace-nowrap 
+}
+
+.nav_item:hover {
+    @apply bg-success text-base-content bg-opacity-10
+}
+
+
+.comment-scroll-margin{
+    scroll-margin-top: 300px;
+}
+

@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404, HttpResponseNotAllowed
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
+from django.utils import timezone
 
 from .models import User, Listing, Bid, Comment, Watchlist, Category
 from .forms import ListingForm, BidForm, CommentForm
@@ -75,7 +76,7 @@ def add_listing(request):
             listing = form.save(commit=False)
             listing.owner=request.user
             listing.status="active"
-            starting_price = form.cleaned_data['starting_price']
+            starting_price = int(form.cleaned_data['starting_price'])
             if starting_price <= 0:
                 return render(request,"auctions/addListing.html",{
                     "form": form,
@@ -103,19 +104,28 @@ def get_listing_context(listing_id):
     listing = get_object_or_404(Listing.objects.select_related('category','owner'),id=listing_id)
     context = {
         'listing':listing,
-        'bid_times':f"{listing.get_bid_count()} Bid(s) so far. Your Bid is the current bid."
+        'bid_times':listing.get_bid_count()
     }
     return listing, context
 
 
     
 def watch_list(request):
-    tracked_items = Watchlist.objects.filter(is_tracked=True, user=request.user)
-    listings = [ tracked_item.item for tracked_item in tracked_items]
-    return render(request, "auctions/watchlist.html",{
-        "Listings":listings
-    })
+    
+        tracked_items = Watchlist.objects.filter(is_tracked=True, user=request.user)
 
+        if tracked_items.exists():
+            listings = [ tracked_item.item for tracked_item in tracked_items]
+            for listing in listings:
+                listing.status = listing.status.upper()
+            return render(request, "auctions/watchlist.html",{
+                "Listings":listings
+            })
+        else:
+            active_listings = Listing.objects.filter(status='active')
+            return render(request, "auctions/watchlist.html",{
+                "active_Listings":active_listings
+            })
 
 def toggle_watch_list(request, listing_id):
     listing, context = get_listing_context(listing_id)
@@ -155,7 +165,7 @@ def add_comment(request, listing_id):
             comment.user = request.user
             comment.save()   
             print(f"Success:{comment}")
-            return HttpResponseRedirect(reverse("auctions:entryBid", args=(listing_id,)))
+            return HttpResponseRedirect(f'{reverse("auctions:entryBid", args=(listing_id,))}?show_comments=all')
     return HttpResponseNotAllowed(['POST'])
  
         
@@ -165,7 +175,7 @@ def edit_comment(request, listing_id, comment_id):
         commentForm = CommentForm(request.POST, instance=comment)
         if commentForm.is_valid():
             comment.save()
-            return HttpResponseRedirect(reverse("auctions:entryBid", args=(listing_id,)))
+            return HttpResponseRedirect(f'{reverse("auctions:entryBid", args=(listing_id,))}?show_comments=all')
     else:
         commentForm = commentForm(instance=comment)
         return render(request, "auctions/bidPage.html",{
@@ -178,6 +188,7 @@ def edit_comment(request, listing_id, comment_id):
 
 def comment_list(listing):
     comments = Comment.objects.select_related('user').filter(item=listing).order_by('-comment_time')
+    comments.count
     return {'Comments':comments}
 
 
@@ -207,10 +218,11 @@ def entry_bid(request, listing_id):
             **show_all_comments_view(request),
             **track_status_button(listing, request.user),
             **comment_list(listing),
+            'now':timezone.now(),
             'message':request.GET.get('message',None),
             'is_owner':request.user == listing.owner,
             'is_winner':request.user == listing.winner,
-            'bidForm':BidForm()
+            'bidForm':BidForm(),
         })
     else: 
         context.update({
@@ -234,15 +246,30 @@ def place_bid(request, listing_id):
             bid = bidForm.save(commit=False)
             bid.object = listing
             bid.user = request.user
-            amount = bidForm.cleaned_data['amount']
+            amount = int(bidForm.cleaned_data['amount'])
             if amount > listing.current_price + 10:
                 bid.save()
                 print(f"Bid:{bid}")
                 return HttpResponseRedirect(reverse("auctions:entryBid", args=(listing_id,)))
             else:
-                context['message']= "Your bid must be at least $10 higher than the current price."
-                context['bidForm'] = BidForm()
+                context.update({
+                  'message': "Your bid must be at least $10 higher than the current price.",
+                  'bidForm':bidForm,
+                  'now':timezone.now(),
+                  **comment_list(listing),
+                  **track_status_button(listing, request.user)
+                })
+                print(context)
                 return render(request, "auctions/bidPage.html",context)
+        else:
+            context.update({
+                'message':"Your bid must enter number not words.",
+                'bidForm':bidForm,
+                'now':timezone.now(),
+                **comment_list(listing),
+                **track_status_button(listing, request.user)                
+            })
+            return render(request, "auctions/bidPage.html",context)
     return HttpResponseNotAllowed(['POST'])
 
             
@@ -260,7 +287,15 @@ def end_bid(request, listing_id):
          except Bid.DoesNotExist:
             listing.status = "active"
             listing.save()
-            context['message']= "Not bids yet. Can't close."
+            context.update({
+                'message':"Not bids yet. Can't close.",
+                'bidForm':BidForm(),
+                'is_owner':request.user == listing.owner,
+                'is_winner': request.user == listing.winner,
+                **track_status_button(listing, request.user),
+                **comment_list(listing),
+                'now':timezone.now(),
+            })
             return render(request, "auctions/bidPage.html", context )
     return HttpResponseNotAllowed(['POST'])
          

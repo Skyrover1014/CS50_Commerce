@@ -1,72 +1,75 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Watch your interested Listings</h2>
-    {% if Listings %}
-    <h3>Active Listing</h3>
+{% if Listings %}
+    <h2 class="text-2xl font-bold text-neutral my-6 pl-6 ">Watch your interested Listings</h2>
+    <div class="grid mx-auto pb-10" data-masonry='{"itemSelector":".grid-item", "columnWidth":".grid-item", "gutter":10, "fitWidth":true}'>
         {% for Listing in Listings %}
-            {% if Listing.status == "active" %}
-            <a href="{% url 'auctions:entryBid' Listing.id %}" class="card_link">
-                <div class="card" >
-                    <img src="{% if Listing.url %}{{Listing.url}}{% else %}/static/placeholder.png{% endif %}" alt="{{Listing.title}}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" >
-                    <div style="margin: 10px;">
-                        <h4>
-                            {{Listing.item}}
-                        </h4>
-                        <div style="margin-bottom: 5px;">
-                            <strong>Price:</strong> {{Listing.current_price}}$
+            <a class="grid-item" href="{% url 'auctions:entryBid' Listing.id %}">
+                <div class="card glass group text-neutral h-auto my-3 shadow-md hover:bg-neutral selection:hover:shadow-lg transition">
+                    <figure class="overflow-hidden relative">
+                        <div class="absolute top-3 right-3 space-x-1">
+                            <div class=" badge badge-neutral p-3 text-nowrap">{{Listing.category.name}}</div>
+                            <div class=" badge badge-accent p-3 text-nowrap text-white">{{Listing.status}}</div>
                         </div>
-                        <div style="margin-bottom: 40px;">
-                            {{Listing.description}}
+                        <div class="absolute bottom-0 left-0 right-0 h-[90px] bg-white bg-opacity-40 text-neutral font-semibold p-4">
+                            <h2 class=" w-full m-0 card-title overflow-x-hidden text-nowrap text-ellipsis">
+                                <div class="text-3xl">{{Listing.item}}</div>
+                            </h2>
+                            <div class="font-bold"> ${{Listing.current_price}}</div>
                         </div>
-                        <div style="margin-bottom: 5px;">
-                            <strong>Seller:</strong> {{Listing.owner}}
-                        </div> 
-                        <div style="font-size: 14px; color: rgb(162, 160, 160)">
-                            Created {{Listing.created_time}}
-                        </div>
-                    </div>
-                </div>
-             </a>
-            {% else %}
-                <h3>No any tracked item is active</h3>
-            {% endif %}
-        {% endfor %}
-    <h3>Ended Listing</h3> 
-    {% for Listing in Listings %}
-        {% if Listing.status == "ended" %}
-            <a href="{% url 'auctions:entryBid' Listing.id %}" class="card_link">
-                <div class="card" >
-                    <img src="{% if Listing.url %}{{Listing.url}}{% else %}/static/placeholder.png{% endif %}" alt="{{Listing.title}}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" >
-                    <div style="margin: 10px;">
-                        <h4>
-                            {{Listing.item}}
-                        </h4>
-                        <div style="margin-bottom: 5px;">
-                            <strong>Price:</strong> {{Listing.current_price}}$
-                        </div>
-                        <div style="margin-bottom: 40px;">
-                            {{Listing.description}}
-                        </div>
-                        <div style="margin-bottom: 5px;">
-                            <strong>Seller:</strong> {{Listing.owner}}
-                        </div> 
-                        <div style="margin-bottom: 5px;">
-                            <strong>Winner:</strong> {{Listing.winner}}
-                        </div> 
-                        <div style="font-size: 14px; color: rgb(162, 160, 160)">
-                            Created {{Listing.created_time}}
-                        </div>
+                        <img class="w-full h-full object-cover"
+                                src="{% if Listing.url %}{{Listing.url}}{% else %}/static/placeholder.png{% endif %}" 
+                                alt="{{Listing.title}}"/>
+                    </figure>
+                    <div class="card-body group-hover:text-white my-5 pl-8 py-1">
+                        <p>{{Listing.description}}</p>
+                        <div class="text-sm text-gray-400">Created {{Listing.created_time}}</div>
                     </div>
                 </div>
             </a>
-        {% else %}
-            <h3>No any tracked item was closed</h3>
-        {% endif %}
-    {% endfor %}
-
-    {% else %}
-            <h3>There is not any tracked item, yet!</h3>
-    {% endif %}
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card lg:card-side bg-base-100 shadow-lg m-5 p-5">
+        <div class="w-full">
+            <div class="card-body relative h-full">
+                <h2 class="md:absolute md:inset-0 text-center lg:flex flex-col card-title z-20 w-full h-full justify-center items-center text-3xl font-bold">You Haven't Watch Any Listing!
+                    <span class="text-lg text-base-200 text-balance"> Swipe to explore the more listings! </span>
+                </h2>
+                <div class="relative">
+                    <div class=" z-10 flex bg-info absolute top-6 left-28 aspect-square w-48 h-32 md:w-80 md:h-80 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+                    <div class=" z-10 flex bg-accent absolute top-24 left-60 md:left-72 aspect-square w-32 h-20 md:w-96 md:h-80 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+                    <div class=" z-10 flex bg-primary absolute top-28 left-8 aspect-square w-48 h-10 md:w-96 md:h-80 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+                </div>
+             </div>
+        </div>
+        <figure class="w-full z-40 rounded-3xl">
+            {% if active_Listings %}
+            <div class="carousel rounded-3xl bg-base-200">
+                {% for active_Listing  in active_Listings  %}
+                <div class="carousel-item rounded-3xl m-2">
+                    <a href="{% url 'auctions:entryBid' active_Listing.id %}">
+                        <img class="h-[600px] object-cover rounded-xl"
+                            src="{% if active_Listing.url %}{{active_Listing.url}}{% else %}/static/placeholder.png{% endif %}" 
+                            alt="{{active_Listing.title}}"/>
+                    </a>
+                </div>
+                {% endfor %}
+                <div class="carousel-item">
+                    <div class="relative">
+                        <div class="absolute w-full text-nowrap top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white font-bold">Explore More</div>
+                        <a  href="{% url 'auctions:index' %}">Explore More
+                            <img class="h-[600px] object-cover"
+                                src="https://i.pinimg.com/474x/76/79/43/76794378c8db43c9a581efd1fb5facc0.jpg" 
+                                alt="Active Listings"/>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </figure>
+    </div>
+{% endif %}
 
 {% endblock %}

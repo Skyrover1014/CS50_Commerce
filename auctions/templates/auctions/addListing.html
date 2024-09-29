@@ -1,37 +1,81 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Create Listings</h2>
 
+<div class="card">
     {% if message %}
-    <div>{{ message }}</div>
-    {% endif %}
-
-    <div class="pageContent" style="display: flex; justify-content: center; margin: 10px;">
-        <form action="{%url 'auctions:newListing' %}" method="post" class="form">
-            {% csrf_token %}
-            <div>
-                <label for="title">Title:</label>
-                {{form.item}}
-            </div>
-            <div>
-                <label for="description">Description:</label>
-                {{form.description}}
-            </div>
-            <div>
-                <label for="starting_price">Starting price:</label>
-                {{form.starting_price}}
-            </div>
-            <div>
-                <label for="url">Image url:</label>
-                {{form.url}}
-            </div>
-            <div>
-                <label for="category">Category:</label>
-                {{form.category}}
-            </div>
-            <div>
-                <button type="submit">New Listing</button>
-            </div>
+    <div>
+    {{message}}
     </div>
+{% endif %}
+<div class="card lg:card-side h-full bg-base-100 shadow-lg m-5">
+    <div class="relative">
+        <div class=" z-10 flex bg-info absolute top-8 left-14 aspect-square w-48 h-32 md:w-80 md:h-80 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+        <div class=" z-10 flex bg-accent absolute top-32 left-60 aspect-square w-32 h-20 md:w-80 md:h-80 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+        <div class=" z-10 flex bg-primary absolute top-44 left-12 aspect-square w-48 h-10 md:w-96 md:h-96 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+    </div>
+    <h2 class="hidden lg:flex card-title z-20 w-full justify-center items-center text-3xl font-bold text-white ">Create Listing</h2>
+    <div class=" card-body flex w-full h-full justify-center">
+        <h2 class="card-title z-20 w-full h-10 p-10 flex text-nowrap lg:hidden justify-center items-center text-3xl font-bold">Create Listing</h2>
+        <form class="z-30 h-full" action="{%url 'auctions:newListing' %}" method="post" >
+            {% csrf_token %}
+
+                <label class="form-control w-full mb-8 lg:mb-2">
+                    <div class="label">
+                        <span class="label-text font-bold">Title</span>
+                    </div>
+                    <input type="text" name="item"  class="input input-bordered w-full"
+                    value="{{form.item.value | default:''}}" placeholder="Enter the listing name" required/>
+                </label>
+
+                <label class="form-control w-full mb-8 lg:mb-2">
+                    <div class="label">
+                        <span class="label-text font-bold">Image URL</span>
+                    </div>
+                    <input type="text" name="url"  class="input input-bordered w-full"
+                    value="{{form.url.value | default:''}}" placeholder="image or not"/>
+                </label>  
+
+                <div class="flex flex-col md:flex-row justify-center mb-8 space-y-8 md:space-y-0 md:space-x-2 md:mb-2">
+                    <label class=" form-control w-full max-w-xs">
+                        <div class="label">
+                            <span class="label-text font-bold">Starting Price</span>
+                        </div>
+                        <input type="text" name="starting_price"  class="input input-bordered w-full max-w-xs"
+                       value="{{form.starting_price.value | default:''}}" placeholder="Give it a price" required/>
+                    </label>
+                    
+                    <label class="form-control w-full font-bold">
+                        <div class="label">
+                            <span class="label-text font-bold">Category</span>
+                        </div>
+                        <select title="category" name="category" class="select select-bordered font-normal" required>
+                            <option disabled selected>Choose the category</option>
+                        {% for category in form.category.field.queryset %}
+                            <option value="{{category.id}}"
+                                {% if form.category.value == category.id %} selected {% endif %}>
+                                {{category.name}}
+                            </option>
+                        {% endfor %}
+                        </select>
+                    </label>
+                </div>
+
+                <label class="form-control mb-8 lg:mb-2">
+                    <div class="label">
+                        <span class="label-text font-bold">Description</span>
+                    </div>
+                    <textarea name="description" class="textarea textarea-bordered min-h-48" placeholder="Type here" >{{form.description.value|default:''}}</textarea>
+                </label>
+
+                <div class="card-actions mt-32 justify-end">
+                    <button class="btn" type="submit">
+                        <div>New Listing</div>
+                    </button>
+                </div>
+        </form>
+    </div>
+</div>
+</div>
+
 {% endblock %}

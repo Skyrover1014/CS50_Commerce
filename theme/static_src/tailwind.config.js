@@ -42,7 +42,13 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+
+        },
+    },
+
+    daisyui:{
+        themes: ["light", "dark", "cmyk"],
     },
     plugins: [
         /**

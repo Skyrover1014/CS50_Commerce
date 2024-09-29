@@ -1,0 +1,23 @@
+<div class="py-3">
+    <details class=" dropdown dropdown-bottom bg-opacity-0 flex w-[80px]">
+        <summary class="btn m-1 bg-opacity-0 border-none shadow-none">
+            <svg class="swap-off fill-current bg-opacity-0 " xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
+                <path d="M64,384H448V341.33H64Zm0-106.67H448V234.67H64ZM64,128v42.67H448V128Z" />
+          </svg>
+        </summary>
+        <ul class="menu dropdown-content bg-base-100 rounded-box z-30 w-52 p-2 shadow">
+            {% if user.is_authenticated %}
+                <p class="p-3 bg-base-200 rounded-md">Signed in as <strong class="text-neutral">{{ user.username }}</strong></p>
+                <li><a class="nav_item" href="{% url 'auctions:index' %}">Active Listings</a></li>
+                <li><a class="nav_item" href="{% url 'auctions:logout' %}">Log Out</a></li>
+                <li><a class="nav_item" href="{% url 'auctions:newListing' %}">Create Listing</a></li>
+                <li><a class="nav_item" href="{% url 'auctions:watchList' %}">Watch List</a></li> 
+                <li><a class="nav_item" href="{% url 'auctions:categoryView' %}">Category</a></li>
+            {% else %}
+                <li><a class="nav_item" href="{% url 'auctions:index' %}">Active Listings</a></li>
+                <li><a class="nav_item" href="{% url 'auctions:login' %}">Log In</a></li>
+                <li><a class="nav_item" href="{% url 'auctions:register' %}">Register</a></li>
+            {% endif %}
+        </ul>
+    </details>
+</div>

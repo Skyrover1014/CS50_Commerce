@@ -15,7 +15,7 @@ class CommentAdmin(SimpleHistoryAdmin):
     list_display = ('item','user','content','comment_time')
 
 class CategoryAdmin(SimpleHistoryAdmin):
-    list_display = ('name','description')
+    list_display = ('name','description','imageCategory')
 
 class WatchlistAdmin(SimpleHistoryAdmin):
     list_display = ('user','item','is_tracked')

@@ -10,6 +10,7 @@ class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
     description = models.TextField(max_length=2048)
     history = HistoricalRecords()
+    imageCategory = models.ImageField(upload_to='category_images/', null=True, blank=True)
 
     def __str__(self):
         return self.name

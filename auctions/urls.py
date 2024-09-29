@@ -20,3 +20,4 @@ urlpatterns = [
     path('category', views.category_view, name="categoryView"),
     path('category/<str:category_name>', views.category_filter, name="categoryFilter")
 ]
+

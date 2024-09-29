@@ -18,7 +18,7 @@ class BidForm(forms.ModelForm):
         model = Bid
         fields = ['amount']
         widgets = {
-            'amount':forms.NumberInput(attrs={'placeholder':'Bid'}),
+            'amount':forms.TextInput(attrs={'placeholder':'Bid'}),
         }
 
 class CommentForm(forms.ModelForm):

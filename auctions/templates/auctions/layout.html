@@ -2,7 +2,7 @@
 {% load static tailwind_tags %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale =1">
@@ -11,56 +11,52 @@
         <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous"> -->
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
-    <body class="bg-gray-100 text-gray-900">        
-        <header class="bg-white shadow">
-            <div class="container mx-auto py-4">
-                <h1 class="text-3xl font-bold text-center">Auctions</h1>
-                <div class="text-center mt-2">
-                    {% if user.is_authenticated %}
-                        <p>Signed in as <strong>{{ user.username }}</strong>.</p>
-                    {% else %}
-                        <p>Not signed in.</p>
-                    {% endif %}
+    
+    <body class="relative z-0 bg-base-100 text-base-content w-screen">
+        <div class="bg-primary absolute z-10 top-20 left-12 md:top-40 md:left-20 aspect-square w-32 h-32 md:w-96 md:h-96 rounded-full opacity-90 blur-3xl [transform:translate3d(0,0,0)] "></div>
+        <div class="bg-success absolute z-10 aspect-square w-full h-full rounded-full opacity-25 blur-3xl [transform:translate3d(0,0,0)]"></div>
+        <div class="navbar relative z-20 bg-opacity-50 items-center text-base-content w-full shadow-lg rounded-bl-lg rounded-br-lg ">
+            <div class="navbar-start w-full h-10 lg:w-1/2 lg:flex relative ">
+                <div class="absolute left-0 lg:hidden">
+                    {% include 'auctions/nav_menu.html' %}
                 </div>
+                <h1 class="text-3xl font-bold flex w-full justify-center lg:justify-start lg:pl-5">
+                    <a class="w-full text-center lg:text-left" href="{% url 'auctions:index' %}">
+                        Auctions
+                    </a>
+                </h1>
             </div>
-        </header>
-
-        <nav class="bg-blue-500 text-white py-2">
-            <ul class="container mx-auto flex justify-center space-x-4">
-                <li>
-                    <a class="hover:underline" href="{% url 'auctions:index' %}">Active Listings</a>
-                </li>
+            <div class="navbar-center hidden font-bold lg:flex">
+                <ul class="menu menu-horizontal px-1">
+                        {% if user.is_authenticated %}
+                        <li><a class="nav_item" href="{% url 'auctions:index' %}">Active Listings</a></li>
+                        <li><a class="nav_item" href="{% url 'auctions:logout' %}">Log Out</a></li>
+                        <li><a class="nav_item" href="{% url 'auctions:newListing' %}">Create Listing</a></li>
+                        <li><a class="nav_item" href="{% url 'auctions:watchList' %}">Watch List</a></li> 
+                        <li><a class="nav_item" href="{% url 'auctions:categoryView' %}">Category</a></li>
+                    {% else %}
+                        <li><a class="nav_item" href="{% url 'auctions:index' %}">Active Listings</a></li>
+                        <li><a class="nav_item" href="{% url 'auctions:login' %}">Log In</a></li>
+                        <li><a class="nav_item" href="{% url 'auctions:register' %}">Register</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="navbar-end hidden lg:flex pr-5">
                 {% if user.is_authenticated %}
-                    <li>
-                        <a class="hover:underline" href="{% url 'auctions:logout' %}">Log Out</a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="{% url 'auctions:newListing' %}">Create Listings</a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="{% url 'auctions:watchList' %}">Watchlist</a>
-                    </li> 
-                    <li>
-                        <a class="hover:underline" href="{% url 'auctions:categoryView' %}">Category</a>
-                    </li>
+                <div class="p-3 mt-1.5">Signed in as <strong class="text-neutral">{{ user.username }}</strong></div>
                 {% else %}
-                    <li>
-                        <a class="hover:underline" href="{% url 'auctions:login' %}">Log In</a>
-                    </li>
-                    <li>
-                        <a class="hover:underline" href="{% url 'auctions:register' %}">Register</a>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav>
-       
-        <main class="container mx-auto mt-6">
-            <hr class="border-gray-300 my-4">
-            {% block body %}
-            {% endblock %}
-        </main>
+                <div class="p-3 mt-1.5">Not signed in.</div>
+                {% endif %} 
+            </div>
+        </div>
 
-        <footer class="bg-white text-center py-4 mt-8">
+        <div class="relative z-10  flex w-full justify-center">
+            <main class="w-full h-full mx-auto mt-5 bg-base-100 bg-opacity-70 rounded-lg shadow-lg">
+                {% block body %}
+                {% endblock %}
+            </main>
+        </div>
+        <footer class="w-full bg-neutral text-neutral-content text-center py-4 mt-8">
             <p>&copy; 2024 Auctions. All rights reserved.</p>
         </footer>
     </body>

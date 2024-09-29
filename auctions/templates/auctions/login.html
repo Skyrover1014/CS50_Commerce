@@ -1,24 +1,27 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
-    <h2>Login</h2>
-
+<div class="flex justify-center items-center lg:h-screen h-svh">
     {% if message %}
-        <div>{{ message }}</div>
-    {% endif %}
+            <div>{{ message }}</div>
+        {% endif %}
+    <div class="card bg-base-100 mx-0 lg:w-1/2 lg:h-5/6 flex justify-center">
+        <form class="relative card-body flex justify-center items-center" action="{% url 'auctions:login' %}" method="post">
+            {% csrf_token %}
+            <h2 class="absolute top-10 card-title w-full justify-center text-2xl my-6 ">Login</h2>
+            <div class="mb-3 w-full flex justify-center">
+                <input autofocus class="input input-bordered w-full max-w-sm" type="text" name="username" placeholder="Username">
+            </div>
+            <div class="mb-10 w-full flex justify-center">
+                <input class="input input-bordered w-full max-w-sm" type="password" name="password" placeholder="Password">
+            </div>
+            <input class="card-actions btn w-full max-w-sm" type="submit" value="Login">
+            <div class="absolute bottom-10">Don't have an account? <a class="text-neutral" href="{% url 'auctions:register' %}">Register here.</a></div>
+    
+        </form>
+    </div>
+</div>
 
-    <form action="{% url 'auctions:login' %}" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <input autofocus class="form-control" type="text" name="username" placeholder="Username">
-        </div>
-        <div class="form-group">
-            <input class="form-control" type="password" name="password" placeholder="Password">
-        </div>
-        <input class="btn btn-primary" type="submit" value="Login">
-    </form>
 
-    Don't have an account? <a href="{% url 'auctions:register' %}">Register here.</a>
 
 {% endblock %}

@@ -12,10 +12,12 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     
-    <body class="relative z-0 bg-base-100 text-base-content w-screen">
-        <div class="bg-primary absolute z-10 top-20 left-12 md:top-40 md:left-20 aspect-square w-32 h-32 md:w-96 md:h-96 rounded-full opacity-90 blur-3xl [transform:translate3d(0,0,0)] "></div>
-        <div class="bg-success absolute z-10 aspect-square w-full h-full rounded-full opacity-25 blur-3xl [transform:translate3d(0,0,0)]"></div>
-        <div class="navbar relative z-20 bg-opacity-50 items-center text-base-content w-full shadow-lg rounded-bl-lg rounded-br-lg ">
+    <body class="relative z-0 bg-base text-base-content w-screen">
+        <div class="bg-warning absolute z-10  aspect-square top-20 left-14 w-32 h-32 lg:top-36 lg:left-36 lg:w-[700px] lg:h-[700px] rounded-full opacity-90 blur-3xl [transform:translate3d(0,0,0)] "></div>
+        <div class="bg-success absolute z-10 aspect-square w-full h-full rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)]"></div>
+        <div class="bg-info absolute z-10 aspect-square w-1/2 h-full right-14 lg:right-20 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)]"></div>
+
+        <div class="navbar relative z-30 bg-opacity-50 items-center text-base-content w-full shadow-lg rounded-bl-lg rounded-br-lg ">
             <div class="navbar-start w-full h-10 lg:w-1/2 lg:flex relative ">
                 <div class="absolute left-0 lg:hidden">
                     {% include 'auctions/nav_menu.html' %}
@@ -27,17 +29,39 @@
                 </h1>
             </div>
             <div class="navbar-center hidden font-bold lg:flex">
-                <ul class="menu menu-horizontal px-1">
+                <ul class="menu menu-horizontal px-1 space-x-8">
                         {% if user.is_authenticated %}
-                        <li><a class="nav_item" href="{% url 'auctions:index' %}">Active Listings</a></li>
-                        <li><a class="nav_item" href="{% url 'auctions:logout' %}">Log Out</a></li>
-                        <li><a class="nav_item" href="{% url 'auctions:newListing' %}">Create Listing</a></li>
-                        <li><a class="nav_item" href="{% url 'auctions:watchList' %}">Watch List</a></li> 
-                        <li><a class="nav_item" href="{% url 'auctions:categoryView' %}">Category</a></li>
+                        {% url 'auctions:index' as active_listings_url %}
+                        <li><a class="nav_item {% if request.path == active_listings_url %} bg-neutral text-neutral-content transition {% endif %}" 
+                            href="{% url 'auctions:index' %}">Active Listings</a></li>
+
+                        {% url 'auctions:newListing' as active_newListing_url %}
+                        <li><a class="nav_item {% if request.path == active_newListing_url %} bg-neutral text-neutral-content transition {% endif %}" 
+                            href="{% url 'auctions:newListing' %}">Create Listing</a></li>
+
+                        {% url 'auctions:watchList' as active_watchList_url %}
+                        <li><a class="nav_item {% if request.path == active_watchList_url %} bg-neutral text-neutral-content transition {% endif %}" 
+                            href="{% url 'auctions:watchList' %}">Watch List</a></li>
+
+                        {% url 'auctions:categoryView' as active_categoryView_url %}
+                        <li><a class="nav_item {% if request.path == active_categoryView_url %} bg-neutral text-neutral-content transition {% endif %}" 
+                            href="{% url 'auctions:categoryView' %}">Category</a></li>
+
+                        {% url 'auctions:logout' as active_logout_url %}
+                        <li><a class="nav_item {% if request.path == active_logout_url %} bg-neutral text-neutral-content transition {% endif %}" 
+                            href="{% url 'auctions:logout' %}">Log Out</a></li>
                     {% else %}
-                        <li><a class="nav_item" href="{% url 'auctions:index' %}">Active Listings</a></li>
-                        <li><a class="nav_item" href="{% url 'auctions:login' %}">Log In</a></li>
-                        <li><a class="nav_item" href="{% url 'auctions:register' %}">Register</a></li>
+                        {% url 'auctions:index' as active_listings_url %}
+                        <li><a class="nav_item {% if request.path == active_listings_url %} bg-neutral text-neutral-content transition {% endif %}"  
+                            href="{% url 'auctions:index' %}">Active Listings</a></li>
+
+                        {% url 'auctions:login' as active_login_url %}
+                        <li><a class="nav_item {% if request.path == active_login_url %} bg-neutral text-neutral-content transition {% endif %}" 
+                            href="{% url 'auctions:login' %}">Log In</a></li>
+
+                        {% url 'auctions:register' as active_register_url %}
+                        <li><a class="nav_item {% if request.path == active_register_url %} bg-neutral text-neutral-content transition {% endif %}" 
+                            href="{% url 'auctions:register' %}">Register</a></li>
                     {% endif %}
                 </ul>
             </div>
@@ -50,13 +74,13 @@
             </div>
         </div>
 
-        <div class="relative z-10  flex w-full justify-center">
-            <main class="w-full h-full mx-auto mt-5 bg-base-100 bg-opacity-70 rounded-lg shadow-lg">
+        <div class="relative z-20 flex w-full justify-center">
+            <main class="w-full mx-auto mt-5 bg-base-100 bg-opacity-70 rounded-lg shadow-lg">
                 {% block body %}
                 {% endblock %}
             </main>
         </div>
-        <footer class="w-full bg-neutral text-neutral-content text-center py-4 mt-8">
+        <footer class="relative z-20 w-full bg-neutral text-neutral-content text-center py-4 mt-8">
             <p>&copy; 2024 Auctions. All rights reserved.</p>
         </footer>
     </body>

@@ -1,28 +1,46 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="flex justify-center items-center lg:h-screen h-svh">
+<div class="flex flex-col justify-center items-center lg:h-screen h-svh">
     {% if message %}
-            <div>{{ message }}</div>
-        {% endif %}
-    <div class="card bg-base-100 mx-0 lg:w-1/2 lg:h-5/6 flex justify-center">
+    <div role="alert" class="alert flex m-5 px-5 w-auto bg-base-100 shadow-xl first-line: ">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="stroke-info h-6 w-6 shrink-0">
+            <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="flex">{{message}}</div>
+    </div>
+    {% endif %}
+    <div class="card bg-base-100 mx-0 lg:w-1/2 h-3/4 lg:h-5/6 flex justify-center shadow-xl">
         <form class="relative card-body flex justify-center items-center" action="{% url 'auctions:register' %}" method="post">
             {% csrf_token %}
-            <h2 class="absolute top-3 card-title w-full justify-center text-2xl my-6 ">Register</h2>
+            <h2 class="absolute top-10 card-title w-full justify-center text-2xl my-6 ">Register</h2>
             <div class="mb-3 w-full flex justify-center">
-                <input autofocus class="input input-bordered w-full max-w-sm" type="text" name="username" placeholder="Username">
+                <input autofocus class="input input-bordered w-full max-w-sm" type="text" name="username" placeholder="Username" required>
             </div>
             <div class="mb-3 w-full flex justify-center">
-                <input class="input input-bordered w-full max-w-sm" type="email" name="email" placeholder="Email Address">
+                <input class="input input-bordered w-full max-w-sm" type="email" name="email" placeholder="Email Address" required>
             </div>
             <div class="mb-3 w-full flex justify-center">
-                <input class="input input-bordered w-full max-w-sm" type="password" name="password" placeholder="Password">
+                <input class="input input-bordered w-full max-w-sm" type="password" name="password" placeholder="Password" required>
             </div>
             <div class="mb-5 w-full flex justify-center">
-                <input class="input input-bordered w-full max-w-sm" type="confirmation" name="confirmation" placeholder="Confirm Password">
+                <input class="input input-bordered w-full max-w-sm" type="confirmation" name="confirmation" placeholder="Confirm Password" required>
             </div>
             <input class="card-actions btn w-full max-w-sm" type="submit" value="Login">
-            <div class="absolute bottom-10">Already have an account? <a class="text-neutral" href="{% url 'auctions:login' %}">Log In here.</a></div>
+            <div class="absolute bottom-10 flex flex-col lg:flex-row justify-center text-center">
+                Already have an account? 
+                <a class="text-neutral font-bold lg:mx-2" href="{% url 'auctions:login' %}">
+                    Log In here.
+                </a>
+            </div>
     
         </form>
     </div> 

@@ -1,81 +1,93 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
-<div class="card">
+ 
+<div class=" justify-center flex flex-col">
     {% if message %}
-    <div>
-    {{message}}
+    <div role="alert" class="alert flex m-5 px-5 w-auto bg-base-100 shadow-xl first-line: ">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            class="stroke-info h-6 w-6 shrink-0">
+            <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="flex">{{message}}</div>
     </div>
-{% endif %}
-<div class="card lg:card-side h-full bg-base-100 shadow-lg m-5">
-    <div class="relative">
-        <div class=" z-10 flex bg-info absolute top-8 left-14 aspect-square w-48 h-32 md:w-80 md:h-80 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
-        <div class=" z-10 flex bg-accent absolute top-32 left-60 aspect-square w-32 h-20 md:w-80 md:h-80 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
-        <div class=" z-10 flex bg-primary absolute top-44 left-12 aspect-square w-48 h-10 md:w-96 md:h-96 rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
-    </div>
-    <h2 class="hidden lg:flex card-title z-20 w-full justify-center items-center text-3xl font-bold text-white ">Create Listing</h2>
-    <div class=" card-body flex w-full h-full justify-center">
-        <h2 class="card-title z-20 w-full h-10 p-10 flex text-nowrap lg:hidden justify-center items-center text-3xl font-bold">Create Listing</h2>
-        <form class="z-30 h-full" action="{%url 'auctions:newListing' %}" method="post" >
-            {% csrf_token %}
-
-                <label class="form-control w-full mb-8 lg:mb-2">
-                    <div class="label">
-                        <span class="label-text font-bold">Title</span>
-                    </div>
-                    <input type="text" name="item"  class="input input-bordered w-full"
-                    value="{{form.item.value | default:''}}" placeholder="Enter the listing name" required/>
-                </label>
-
-                <label class="form-control w-full mb-8 lg:mb-2">
-                    <div class="label">
-                        <span class="label-text font-bold">Image URL</span>
-                    </div>
-                    <input type="text" name="url"  class="input input-bordered w-full"
-                    value="{{form.url.value | default:''}}" placeholder="image or not"/>
-                </label>  
-
-                <div class="flex flex-col md:flex-row justify-center mb-8 space-y-8 md:space-y-0 md:space-x-2 md:mb-2">
-                    <label class=" form-control w-full max-w-xs">
+    {% endif %}
+    <div class="card xl:card-side m-5 p-5 bg-base-100 shadow-xl">
+        <div class="hidden xl:flex rounded-3xl w-full">
+            <img class="h-svh w-full object-cover rounded-3xl" alt="Create Listing"
+                src="https://i.pinimg.com/564x/10/23/f0/1023f0a17551271a384d0b98f9c01fb5.jpg">
+        </div>
+        <div class="relative">
+            <div class="xl:hidden z-10 flex bg-info absolute top-8 left-14  w-48 h-32  md:w-full md:top-20  md:left-14 aspect-square  rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+            <div class="xl:hidden z-10 flex bg-accent absolute top-32 left-60 w-10 h-20 md:w-2/3 md:top-36  md:left-72 aspect-square  rounded-full opacity-50 blur-3xl [transform:translate3d(0,0,0)] "></div>
+        </div>
+        <div class=" card-body flex w-full justify-center">
+            <h2 class="card-title z-20 w-full h-10 p-10 flex text-nowrap justify-center items-center text-3xl xl:my-0 xl:pt-10 font-bold">Create Listing</h2>
+            <form class="xl:flex xl:flex-col z-30 xl:space-y-5 " action="{%url 'auctions:newListing' %}" method="post" >
+                {% csrf_token %}
+                    <label class="form-control w-full mb-8 flex-grow">
                         <div class="label">
-                            <span class="label-text font-bold">Starting Price</span>
+                            <span class="label-text font-bold text-xl xl:text-[16px]">Title</span>
                         </div>
-                        <input type="text" name="starting_price"  class="input input-bordered w-full max-w-xs"
-                       value="{{form.starting_price.value | default:''}}" placeholder="Give it a price" required/>
+                        <input type="text" name="item"  class="input input-bordered w-full"
+                        value="{{form.item.value | default:''}}" placeholder="Enter the listing name" required/>
                     </label>
-                    
-                    <label class="form-control w-full font-bold">
+
+                    <label class="form-control w-full mb-8 flex-grow">
                         <div class="label">
-                            <span class="label-text font-bold">Category</span>
+                            <span class="label-text font-bold text-xl xl:text-[16px]">Image URL</span>
                         </div>
-                        <select title="category" name="category" class="select select-bordered font-normal" required>
-                            <option disabled selected>Choose the category</option>
-                        {% for category in form.category.field.queryset %}
-                            <option value="{{category.id}}"
-                                {% if form.category.value == category.id %} selected {% endif %}>
-                                {{category.name}}
-                            </option>
-                        {% endfor %}
-                        </select>
-                    </label>
-                </div>
+                        <input type="text" name="url"  class="input input-bordered w-full"
+                        value="{{form.url.value | default:''}}" placeholder="image or not"/>
+                    </label>  
 
-                <label class="form-control mb-8 lg:mb-2">
-                    <div class="label">
-                        <span class="label-text font-bold">Description</span>
+                    <div class="flex flex-col xl:flex-row space-y-7  xl:space-y-0 xl:space-x-2 mb-8 justify-center flex-grow ">
+                        <label class="form-control w-full">
+                            <div class="label">
+                                <span class="label-text font-bold text-xl xl:text-[16px]">Starting Price</span>
+                            </div>
+                            <input type="text" name="starting_price"  class="input input-bordered w-full"
+                            value="{{form.starting_price.value | default:''}}" placeholder="Give it a price" required/>
+                        </label>
+                        
+                        <label class="form-control w-full font-bold flex-grow">
+                            <div class="label">
+                                <span class="label-text font-bold text-xl xl:text-[16px]">Category</span>
+                            </div>
+                            <select title="category" name="category" class="select select-bordered font-normal" required>
+                                <option disabled selected>Choose the category</option>
+                            {% for category in form.category.field.queryset %}
+                                <option value="{{category.id}}"
+                                    {% if form.category.value == category.id %} selected {% endif %}>
+                                    {{category.name}}
+                                </option>
+                            {% endfor %}
+                            </select>
+                        </label>
                     </div>
-                    <textarea name="description" class="textarea textarea-bordered min-h-48" placeholder="Type here" >{{form.description.value|default:''}}</textarea>
-                </label>
 
-                <div class="card-actions mt-32 justify-end">
-                    <button class="btn" type="submit">
-                        <div>New Listing</div>
-                    </button>
-                </div>
-        </form>
+                    <label class="form-control mb-8 flex-grow">
+                        <div class="label">
+                            <span class="label-text font-bold text-xl xl:text-[16px]">Description</span>
+                        </div>
+                        <textarea name="description" class="textarea textarea-bordered min-h-48" placeholder="Type here" >{{form.description.value|default:''}}</textarea>
+                    </label>
+
+                    <div class="card-actions justify-end">
+                        <button class="btn" type="submit">
+                            <div>New Listing</div>
+                        </button>
+                    </div>
+            </form>
+        </div>
     </div>
-</div>
 </div>
 
 {% endblock %}

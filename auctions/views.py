@@ -80,7 +80,7 @@ def add_listing(request):
             if starting_price <= 0:
                 return render(request,"auctions/addListing.html",{
                     "form": form,
-                    "message": "the starting_price must be greater than 0 dollars! "
+                    "message": "the starting price must be greater than 0 dollars! "
                 })
             else:
                 listing.current_price = starting_price
@@ -89,7 +89,7 @@ def add_listing(request):
         else:
             return render(request, "auctions/addListing.html",{
                 'form': form,
-                'message':"Form validation failed. Please check your submit!"
+                'message':"Form validation failed. Please check your submit! The URl may be not valid!"
             })
     else:
         form = ListingForm()
@@ -247,7 +247,7 @@ def place_bid(request, listing_id):
             bid.object = listing
             bid.user = request.user
             amount = int(bidForm.cleaned_data['amount'])
-            if amount > listing.current_price + 10:
+            if amount > listing.current_price + 9:
                 bid.save()
                 print(f"Bid:{bid}")
                 return HttpResponseRedirect(reverse("auctions:entryBid", args=(listing_id,)))

@@ -2917,6 +2917,10 @@ html {
   margin-bottom: 1rem;
 }
 
+.mb-20 {
+  margin-bottom: 5rem;
+}
+
 .box-border {
   box-sizing: border-box;
 }
@@ -3416,6 +3420,10 @@ html {
   padding: 1.25rem;
 }
 
+.p-20 {
+  padding: 5rem;
+}
+
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -3482,6 +3490,10 @@ html {
 
 .pr-5 {
   padding-right: 1.25rem;
+}
+
+.pb-20 {
+  padding-bottom: 5rem;
 }
 
 .text-left {
@@ -4176,6 +4188,10 @@ html {
     --tw-space-y-reverse: 0;
     margin-top: calc(1.25rem * calc(1 - var(--tw-space-y-reverse)));
     margin-bottom: calc(1.25rem * var(--tw-space-y-reverse));
+  }
+
+  .xl\:p-20 {
+    padding: 5rem;
   }
 
   .xl\:pt-10 {

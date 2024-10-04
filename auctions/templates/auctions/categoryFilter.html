@@ -1,8 +1,8 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="p-5 m-5 bg-base-200 rounded-3xl shadow-xl bg-opacity-80 h-svh">
-    <h2 class="text-xl lg:text-2xl p-5 font-bold text-white badge badge-neutral ">{{Category}}</h2>
+<div class="p-5 m-5 rounded-3xl shadow-xl bg-opacity-80 h-auto min-h-[900px]">
+    <h2 class="text-xl lg:text-2xl p-5 ml-7 font-bold text-white badge badge-neutral ">{{Category}}</h2>
     {% if Category %}
         {% if Listings %}
         <div class="grid mx-auto py-5" data-masonry='{"itemSelector":".grid-item", "columnWidth":".grid-item", "gutter":10, "fitWidth":true}'>

@@ -19,7 +19,7 @@ class Listing(models.Model):
     winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='won_listing')
     item = models.CharField(max_length=64)
     description = models.TextField(max_length=2048)
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=False, related_name='choose_category')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='choose_category')
     starting_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     current_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     url = models.URLField(blank=True, null=True, max_length=500)

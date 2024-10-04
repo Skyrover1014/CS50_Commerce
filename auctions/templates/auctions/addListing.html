@@ -61,7 +61,7 @@
                             <div class="label">
                                 <span class="label-text font-bold text-xl xl:text-[16px]">Category</span>
                             </div>
-                            <select title="category" name="category" class="select select-bordered font-normal" required>
+                            <select title="category" name="category" class="select select-bordered font-normal">
                                 <option disabled selected>Choose the category</option>
                             {% for category in form.category.field.queryset %}
                                 <option value="{{category.id}}"

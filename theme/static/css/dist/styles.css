@@ -2921,6 +2921,30 @@ html {
   margin-bottom: 5rem;
 }
 
+.ml-5 {
+  margin-left: 1.25rem;
+}
+
+.ml-10 {
+  margin-left: 2.5rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.ml-12 {
+  margin-left: 3rem;
+}
+
+.ml-8 {
+  margin-left: 2rem;
+}
+
+.ml-7 {
+  margin-left: 1.75rem;
+}
+
 .box-border {
   box-sizing: border-box;
 }
@@ -3044,6 +3068,14 @@ html {
 
 .min-h-48 {
   min-height: 12rem;
+}
+
+.min-h-\[800px\] {
+  min-height: 800px;
+}
+
+.min-h-\[900px\] {
+  min-height: 900px;
 }
 
 .w-1\/2 {
@@ -3494,6 +3526,14 @@ html {
 
 .pb-20 {
   padding-bottom: 5rem;
+}
+
+.pl-5 {
+  padding-left: 1.25rem;
+}
+
+.pl-10 {
+  padding-left: 2.5rem;
 }
 
 .text-left {

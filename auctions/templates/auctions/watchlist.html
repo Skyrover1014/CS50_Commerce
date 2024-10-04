@@ -2,8 +2,7 @@
 
 {% block body %}
 {% if Listings %}
-<div class="h-full">
-    <div class="grid mx-auto py-5 h-svh" data-masonry='{"itemSelector":".grid-item", "columnWidth":".grid-item", "gutter":20, "fitWidth":true}'>
+    <div class="grid mx-auto py-5 h-svh min-h-[900px] " data-masonry='{"itemSelector":".grid-item", "columnWidth":".grid-item", "gutter":20, "fitWidth":true}'>
         {% for Listing in Listings %}
             <a class="grid-item" href="{% url 'auctions:entryBid' Listing.id %}">
                 <div class="card glass bg-base-200 group text-neutral h-auto my-3 shadow-md hover:bg-neutral selection:hover:shadow-lg transition">                    
@@ -30,8 +29,7 @@
             </a>
         {% endfor %}
     </div>
-</div>
-    
+    <script src="https://masonry.desandro.com/masonry.pkgd.min.js"></script>
 {% else %}
     <div class="card lg:card-side rounded-box bg-base-100 shadow-lg m-5 p-5 h-svh">
         <div class="w-full h-full">
@@ -72,7 +70,7 @@
     </div>
 {% endif %}
 
-<script src="https://masonry.desandro.com/masonry.pkgd.min.js"></script>
+
 
 {% endblock %}
 

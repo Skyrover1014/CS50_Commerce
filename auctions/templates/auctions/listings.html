@@ -5,7 +5,7 @@
             <a class="grid-item" href="{% url 'auctions:entryBid' Listing.id %}">
                 <div class="card glass bg-base-200 group text-neutral h-auto my-3 shadow-md hover:bg-neutral selection:hover:shadow-lg transition">
                     <figure class="overflow-hidden relative">
-                        <div class="absolute top-3 right-3 badge badge-neutral text-[11px] p-2.5 text-nowrap">{{Listing.category.name}}</div>
+                        <div class="absolute top-3 right-3 badge badge-neutral text-[11px] p-2.5 text-nowrap">{% if Listing.category.name %} {{Listing.category.name }} {% else %} Other {% endif %}</div>
                         <div class="absolute bottom-0 left-0 right-0 h-[60px] md:h-[80px] bg-white bg-opacity-40 text-neutral font-semibold p-2 pl-3 md:p-4">
                             <h2 class=" w-full card-title text-lg md:text-xl overflow-x-hidden text-nowrap text-ellipsis">
                                 <div>{{Listing.item}}</div>

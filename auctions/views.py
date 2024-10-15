@@ -100,6 +100,8 @@ def add_listing(request):
         })
 
 
+
+
 def get_listing_context(listing_id):
     listing = get_object_or_404(Listing.objects.select_related('category','owner'),id=listing_id)
     context = {
@@ -107,9 +109,7 @@ def get_listing_context(listing_id):
         'bid_times':listing.get_bid_count()
     }
     return listing, context
-
-
-    
+  
 def watch_list(request):
     
         tracked_items = Watchlist.objects.filter(is_tracked=True, user=request.user)
@@ -145,7 +145,6 @@ def toggle_watch_list(request, listing_id):
         return HttpResponseRedirect(reverse("auctions:entryBid", args=(listing_id,)))
     return HttpResponseNotAllowed(['POST'])
 
-
 def track_status_button(listing, user):
     track_item = Watchlist.objects.filter(item=listing, user=user).first()
     return {
@@ -167,8 +166,7 @@ def add_comment(request, listing_id):
             print(f"Success:{comment}")
             return HttpResponseRedirect(f'{reverse("auctions:entryBid", args=(listing_id,))}?show_comments=all')
     return HttpResponseNotAllowed(['POST'])
- 
-        
+       
 def edit_comment(request, listing_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id) 
     if request.method == "POST":
@@ -185,12 +183,10 @@ def edit_comment(request, listing_id, comment_id):
         })
     return HttpResponseNotAllowed(['POST'])
 
-
 def comment_list(listing):
     comments = Comment.objects.select_related('user').filter(item=listing).order_by('-comment_time')
     comments.count
     return {'Comments':comments}
-
 
 def edit_comment_view (request):
     edit_comment_id = request.GET.get('edit',None)
@@ -204,9 +200,10 @@ def edit_comment_view (request):
         'commentForm': CommentForm()
     }
 
-
 def show_all_comments_view(request):
     return { 'show_all_comments' : request.GET.get('show_comments', None) == 'all'}
+
+
 
 
 def entry_bid(request, listing_id):   
@@ -236,7 +233,6 @@ def entry_bid(request, listing_id):
         })
     print(context)
     return render(request, "auctions/bidPage.html",context)
-
 
 def place_bid(request, listing_id):
     listing, context = get_listing_context(listing_id)
@@ -271,8 +267,7 @@ def place_bid(request, listing_id):
             })
             return render(request, "auctions/bidPage.html",context)
     return HttpResponseNotAllowed(['POST'])
-
-            
+          
 def end_bid(request, listing_id):
     listing, context = get_listing_context(listing_id)
     if request.method == "POST":  
@@ -300,12 +295,13 @@ def end_bid(request, listing_id):
     return HttpResponseNotAllowed(['POST'])
          
 
+
+
 def category_view(request):
     Categories = Category.objects.all()
     return render(request, "auctions/category.html",{
         'Categories':Categories,
     })
-
 
 def category_filter(request, category_name):
     category = get_object_or_404(Category, name=category_name)

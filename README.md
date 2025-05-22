@@ -26,20 +26,10 @@
 
 ## 🛠 使用技術
 
-**-** **後端框架**：
+**-** **後端框架**：Django 5.2
 
-**  **- Django 5.2
+**-** **樣式設計**：Tailwind CSS（透過 **`django-tailwind`**）、DaisyUI（UI 元件庫）、 Masonry.js（瀑布流佈局）
 
-**-** **樣式設計**：
-
-**  **- Tailwind CSS（透過 **`django-tailwind`**）
-
-**  **- DaisyUI（UI 元件庫）
-
-**  **- Masonry.js（瀑布流佈局）
-
-**-** **資料庫**：
-
-**  **- SQLite（預設使用）
+**-** **資料庫**：SQLite（預設使用）
 
 ---
